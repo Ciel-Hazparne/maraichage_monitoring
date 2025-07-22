@@ -1,0 +1,28 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Monitoring_graphes{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <h1 class="mb-4">Monitoring graphique des mesures</h1>
+
+        <div class="row">
+            <div class="col-md-6 mb-4">
+                <h3>Humidité Champ</h3>
+                {{ render_chart(chart_humidite_champ) }}
+            </div>
+            <div class="col-md-6 mb-4">
+                <h3>Température Champ</h3>
+                {{ render_chart(chart_temp_champ) }}
+            </div>
+            <div class="col-md-6 mb-4">
+                <h3>Humidité Serre</h3>
+                {{ render_chart(chart_humidite_serre) }}
+            </div>
+            <div class="col-md-6 mb-4">
+                <h3>Température Serre</h3>
+                {{ render_chart(chart_temp_serre) }}
+            </div>
+        </div>
+    </div>
+{% endblock %}

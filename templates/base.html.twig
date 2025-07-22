@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>{% block title %}Supervision Maraîchage!{% endblock %}</title>
+
+        {% block stylesheets %}
+            <link href="https://cdn.jsdelivr.net/npm/bootswatch@5.3.3/dist/flatly/bootstrap.min.css" rel="stylesheet">
+            {{ encore_entry_link_tags('app') }}
+        {% endblock %}
+
+        {% block javascripts %}
+            <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+            {{ encore_entry_script_tags('app') }}
+        {% endblock %}
+    </head>
+    <body class="d-flex flex-column min-vh-100">
+    <header data-bs-theme="auto">
+        {% include 'partials/header.html.twig'%}
+    </header>
+    <main data-bs-theme="auto">
+        <div class="container mt-3">
+            {% block body %}{% endblock %}
+        </div>
+    </main>
+    </body>
+</html>
