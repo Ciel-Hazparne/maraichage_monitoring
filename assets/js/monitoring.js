@@ -1,4 +1,19 @@
 document.addEventListener("DOMContentLoaded", () => {
+    // Fonction utilitaire : retourne la date actuelle au format ISO avec fuseau Europe/Paris
+    function getLocalISODateString() {
+        const now = new Date();
+        const tzo = -now.getTimezoneOffset(); // minutes de décalage UTC (ex : -120 => +02:00)
+        const dif = tzo >= 0 ? "+" : "-";
+        const pad = (num) => (Math.floor(Math.abs(num)) < 10 ? "0" : "") + Math.floor(Math.abs(num));
+
+        return now.getFullYear() +
+            "-" + pad(now.getMonth() + 1) +
+            "-" + pad(now.getDate()) +
+            "T" + pad(now.getHours()) +
+            ":" + pad(now.getMinutes()) +
+            ":" + pad(now.getSeconds()) +
+            dif + pad(tzo / 60) + ":" + pad(tzo % 60);
+    }
     const tokenForm = document.getElementById("tokenForm");
     const createForm = document.getElementById("createMeasureForm");
     const editForm = document.getElementById("form-edit");
@@ -78,17 +93,13 @@ document.addEventListener("DOMContentLoaded", () => {
     createForm.addEventListener("submit", async (e) => {
         e.preventDefault();
         const formData = new FormData(createForm);
-        const data = Object.fromEntries(formData.entries());
 
-        // Forcer la conversion de `valeur` en float
-        data.valeur = parseFloat(data.valeur);
-
-        // Renommer la clé "libelle" en "libelleMesure"
-        data.libelleMesure = data.libelle;
-        delete data.libelle;
-
-        // ajouter une date automatique si pas fournie
-        data.createdAt = new Date().toISOString();
+    // Construction manuelle de l'objet à envoyer, avec valeurs correctement typées
+        const data = {
+            libelleMesure: `${formData.get("libelle")}`, // IRI attendu par l’API
+            valeur: parseFloat(formData.get("valeur")), // conversion explicite en float
+            createdAt: getLocalISODateString(), // date ISO avec fuseau Europe/Paris
+        };
 
         try {
             const res = await fetch("http://localhost:8000/api/mesures", {
