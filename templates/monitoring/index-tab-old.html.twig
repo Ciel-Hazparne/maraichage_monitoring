@@ -1,0 +1,54 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Monitoring des mesures{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <h1 class="mb-4">Monitoring des mesures</h1>
+        {% if mesures is empty %}
+            <div class="alert alert-warning">
+                Aucune mesure trouvée pour les critères sélectionnés.
+            </div>
+        {% else %}
+            <div class="row">
+                {% for config in tableConfigs %}
+                    <div class="col-md-6 mb-4">
+                        <h3>{{ config.title }}</h3>
+                        <table class="table table-striped table-bordered align-middle">
+                            <thead class="table-dark">
+                            <tr>
+                                <th>Mesure</th>
+                                <th>Valeur</th>
+                                <th>Date de mesure</th>
+                                <th>Actions</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for mesure in mesures %}
+                                {% if mesure.libelle == config.libelle %}
+                                    <tr>
+                                        <td>{{ mesure.libelle }}</td>
+                                        <td>{{ mesure.valeur }}</td>
+                                        <td>{{ mesure.createdAt|date('d/m/Y H:i') }}</td>
+                                        <td>
+{#                                            {% if is_granted('ROLE_ADMIN') %}#}
+                                                <button class="btn btn-warning btn-sm btn-edit" data-id="{{ mesure.id }}">
+                                                    <i class="fa fa-pencil-square-o"></i>
+
+                                                </button>
+                                                <button class="btn btn-danger btn-sm btn-delete" data-id="{{ mesure.id }}">
+                                                    <i class="fa fa-trash-o"></i>
+                                                </button>
+{#                                            {% endif %}#}
+                                        </td>
+                                    </tr>
+                                {% endif %}
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}

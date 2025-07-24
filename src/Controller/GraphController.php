@@ -27,7 +27,6 @@ class GraphController extends AbstractController
         foreach ($libelles as $libelle) {
             $url = $baseUrl . http_build_query([
                     'libelleMesure.libelle' => $libelle,
-                    'order[createdAt]' => 'desc',
                     'itemsPerPage' => 30,
                 ]);
 
@@ -43,18 +42,18 @@ class GraphController extends AbstractController
             $values = [];
 
             foreach ($data as $mesure) {
-                $labels[] = date('H:i', strtotime($mesure['createdAt']));
+                $labels[] = date('d/m/Y H:i', strtotime($mesure['createdAt']));
                 $values[] = $mesure['valeur'];
             }
 
             $chart = $chartBuilder->createChart(Chart::TYPE_LINE);
             $chart->setData([
-                'labels' => array_reverse($labels),
+                'labels' => $labels,
                 'datasets' => [[
                     'label' => $libelle,
-                    'backgroundColor' => 'rgb(44, 62, 80)',
+                    'backgroundColor' => 'rgb(100, 155, 125)',
                     'borderColor' => 'rgb(24, 188, 156)',
-                    'data' => array_reverse($values),
+                    'data' => $values,
                 ]],
             ]);
 
@@ -70,7 +69,7 @@ class GraphController extends AbstractController
             $charts[$libelle] = $chart;
         }
 
-        return $this->render('monitoring/index.html.twig', [
+        return $this->render('monitoring/graph.html.twig', [
             'current_menu' => 'graph',
             'chart_humidite_champ' => $charts['humidite_champ'] ?? null,
             'chart_temp_champ' => $charts['temp_champ'] ?? null,

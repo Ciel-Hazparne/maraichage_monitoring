@@ -1,0 +1,147 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Monitoring des mesures{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center my-4">
+            <h1>Monitoring des mesures</h1>
+            <div>
+                <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#tokenModal"><i
+                            class="fa fa-key"></i> Token
+                </button>
+                <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#createMeasureModal"><i
+                            class="fa fa-plus"></i> Créer mesure
+                </button>
+            </div>
+        </div>
+
+        {% if mesures is empty %}
+            <div class="alert alert-warning">
+                Aucune mesure trouvée.
+            </div>
+        {% else %}
+            <div class="row">
+                {% for config in tableConfigs %}
+                    <div class="col-md-6 mb-4">
+                        <h3>{{ config.title }}</h3>
+                        <table class="table table-striped table-bordered align-middle">
+                            <thead class="table-dark">
+                            <tr>
+                                <th>Valeur</th>
+                                <th>Date</th>
+                                <th>Actions</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for mesure in mesures %}
+                                {% if mesure.libelle == config.libelle %}
+                                    <tr>
+                                        <td>{{ mesure.valeur }}  {{ mesure.unite }}</td>
+                                        <td>{{ mesure.createdAt|date('d/m/Y H:i') }}</td>
+                                        <td>
+                                            <button class="btn btn-warning btn-sm btn-edit" data-id="{{ mesure.id }}"
+                                                    data-libelle="{{ mesure.libelle }}"
+                                                    data-valeur="{{ mesure.valeur }}">
+                                                <i class="fa fa-pencil-square-o"></i>
+                                            </button>
+                                            <button class="btn btn-danger btn-sm btn-delete" data-id="{{ mesure.id }}">
+                                                <i class="fa fa-trash-o"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                {% endif %}
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+
+    {# Modal TOKEN #}
+    <div class="modal fade" id="tokenModal" tabindex="-1" aria-labelledby="tokenModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form id="tokenForm">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="tokenModalLabel">Connexion API</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div id="tokenMessage" class="mb-2"></div>
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="email" name="_email" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="password" class="form-label">Mot de passe</label>
+                            <input type="password" class="form-control" id="password" name="_password" required>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-success">Obtenir le token</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    {# Modal CREER MESURE #}
+    <div class="modal fade" id="createMeasureModal" tabindex="-1" aria-labelledby="createMeasureModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form id="createMeasureForm">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="createMeasureModalLabel">Créer une mesure</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label for="libelleSelect" class="form-label">Libellé</label>
+                            <select id="libelleSelect" name="libelle" class="form-select" required>
+                                <option value="">Chargement...</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="valeur" class="form-label">Valeur</label>
+                            <input type="number" step="0.01" name="valeur" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <select name="libelle" hidden></select>
+                            <select name="unite" hidden></select>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-success">Enregistrer</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    {# Modal EDIT MESURE #}
+    <div class="modal fade" id="editModal" tabindex="-1">
+        <div class="modal-dialog">
+            <form class="modal-content" id="form-edit">
+                <div class="modal-header">
+                    <h5 class="modal-title">Modifier la mesure</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" name="id">
+                    <label for="valeur" class="form-label">Valeur</label>
+                    <input type="number" step="0.01" name="valeur" class="form-control mb-2" placeholder="Nouvelle valeur" required>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">Annuler</button>
+                    <button class="btn btn-warning" type="submit">Modifier</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    {{ encore_entry_script_tags('monitoring') }}
+
+{% endblock %}
