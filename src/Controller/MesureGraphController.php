@@ -4,12 +4,12 @@ namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\UX\Chartjs\Builder\ChartBuilderInterface;
 use Symfony\UX\Chartjs\Model\Chart;
 
-class GraphController extends AbstractController
+class MesureGraphController extends AbstractController
 {
     #[Route('/graph', name: 'graph')]
     public function index(ChartBuilderInterface $chartBuilder, HttpClientInterface $httpClient): Response
@@ -69,7 +69,7 @@ class GraphController extends AbstractController
             $charts[$libelle] = $chart;
         }
 
-        return $this->render('monitoring/graph.html.twig', [
+        return $this->render('mesure/graph.html.twig', [
             'current_menu' => 'graph',
             'chart_humidite_champ' => $charts['humidite_champ'] ?? null,
             'chart_temp_champ' => $charts['temp_champ'] ?? null,

@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Supprimer un libellé de mesure{% endblock %}
+
+{% block body %}
+    <h1>Supprimer le libellé</h1>
+
+    <div class="alert alert-warning">
+        <strong>Attention :</strong> Vous êtes sur le point de supprimer définitivement le libellé suivant :
+    </div>
+
+    <dl class="row">
+        <dt class="col-sm-3">Libellé</dt>
+        <dd class="col-sm-9">{{ libelleMesure.libelle }}</dd>
+
+        <dt class="col-sm-3">Unité</dt>
+        <dd class="col-sm-9">{{ libelleMesure.unite }}</dd>
+    </dl>
+
+    <form method="post" action="{{ path('libelle_mesures_delete', { id: libelleMesure.id }) }}">
+        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ libelleMesure.id) }}">
+
+        <a href="{{ path('libelle_mesures_index') }}" class="btn btn-secondary">Annuler</a>
+        <button class="btn btn-danger">Supprimer</button>
+    </form>
+{% endblock %}

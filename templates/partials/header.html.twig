@@ -11,15 +11,32 @@
                        class="nav-link {% if current_menu is defined and current_menu == 'home' %}active{% endif %}">
                         <i class="fa fa-home"></i> Accueil </a>
                 </li>
-                <li class="nav-item">
-                    <a href="{{ path('tab') }}"
-                       class="nav-link {% if current_menu is defined and current_menu == 'tab' %}active{% endif %}">
-                        <i class="fa fa-table"></i> Tableaux </a>
+                <!-- Dropdown Mesures tableaux et graphiques  -->
+                <li class="nav-item dropdown">
+                    <a href="#" class="nav-link dropdown-toggle
+                    {% if current_menu is defined and current_menu in ['mesures', 'graph'] %}active{% endif %}"
+                       data-bs-toggle="dropdown" role="button" aria-expanded="false">
+                        <i class="fa fa-line-chart"></i> Mesures
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu">
+                        <li><a href="{{ path('mesures_index') }}"
+                               class="dropdown-item {% if current_menu is defined and current_menu == 'mesures' %}active{% endif %}">
+                                <i class="fa fa-table"></i> Liste des mesures</a>
+                        </li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ path('graph') }}"
+                               class="dropdown-item {% if current_menu is defined and current_menu == 'graph' %}active{% endif %}">
+                                <i class="fa fa-area-chart"></i> Graphiques </a>
+                        </li>
+                    </ul>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ path('graph') }}"
-                       class="nav-link {% if current_menu is defined and current_menu == 'graph' %}active{% endif %}">
-                        <i class="fa fa-area-chart"></i> Graphiques </a>
+                    <a href="{{ path('libelle_mesures_index') }}"
+                       class="nav-link {% if current_menu is defined and current_menu == 'libelle_mesures' %}active{% endif %}">
+                        <i class="fa fa-tags"></i> Libellés des mesures </a>
                 </li>
             </ul>
         </div>

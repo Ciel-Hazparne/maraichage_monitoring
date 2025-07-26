@@ -12,8 +12,18 @@
 </head>
 <body class="d-flex flex-column min-vh-100">
 <header data-bs-theme="auto">
-    {% include 'partials/header.html.twig' %}
+    {% include 'partials/header.html.twig'%}
 </header>
+{% for label, messages in app.flashes %}
+    <div class="container mt-2">
+        {% for message in messages %}
+            <div class="alert alert-{{ label }} alert-dismissible fade show" role="alert">
+                {{ message | raw }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fermer"></button>
+            </div>
+        {% endfor %}
+    </div>
+{% endfor %}
 <main data-bs-theme="auto">
     <div class="container mt-3">
         {% block body %}{% endblock %}
